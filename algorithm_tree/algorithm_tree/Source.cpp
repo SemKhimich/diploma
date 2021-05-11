@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
-#include "Tree.h"
+#include "GraphCalculator.h"
 
 void PrintChainsFour(const std::vector<std::vector<int>>& chains_four) {
     std::cout << "Chains four\n";
@@ -32,32 +32,27 @@ int main() {
         std::cout << "Press 'g' to generate graph\n";
         std::cout << "Press 'e' to enter graph\n";
         std::cout << "Press 'q' to exit\n";
-        Tree tree({});
         std::string command;
         std::getline(std::cin, command);
+        std::vector<std::vector<int>> adj_list;
         if (command == "q") {
             break;
         } else if (command == "g") {
-            int vertex_num = rand() % 10 + 10;
-            tree = Tree::GenerateTree(vertex_num);
-            tree.Print();
+            std::cout << "Enter vertex_num ";
+            int vertex_num;
+            std::cin >> vertex_num;
+            adj_list = GraphCalculator::GenerateTree(vertex_num);
+            GraphCalculator::Print(adj_list);
         } else if (command == "e") {
-            tree = Tree::ReadTree();
+            adj_list = GraphCalculator::ReadTree();
         } else {
             continue;
         }
         std::cout << "**************************\n";
-        if (tree.IsTheoremWork()) {
-            std::cout << "theorem works\n";
-        } else {
-            std::cout << "theorem doesn't work\n";
-        }
+        PrintChainsFour(GraphCalculator::GetChainsFourTree(adj_list));
         std::cout << "**************************\n";
-        PrintChainsFour(tree.GetChainsFour());
-        std::cout << "**************************\n";
-        PrintGammaTwo(tree.GetGammaTwo());
+        PrintGammaTwo(GraphCalculator::GetGammaTwoTree(adj_list));
         std::cout << "**************************\n";
     } while (true);
-    system("pause");
     return 0;
 }
